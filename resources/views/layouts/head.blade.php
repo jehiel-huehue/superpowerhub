@@ -3,7 +3,7 @@
     
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>Super Power Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
     <!-- Styles / Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
