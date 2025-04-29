@@ -13,6 +13,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/generate', [SuperpowerController::class, 'generate'])->name('generate');
 Route::post('/generate_training', [TrainingController::class, 'generate_training'])->name('generate_training');
+Route::post('/train', [TrainingController::class, 'train'])->name('train');
 
 // Protected route example:
 Route::middleware('auth')->group(function () {
