@@ -9,7 +9,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/register', [AuthController::class, 'showRegistration'])->name('register');
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/generate', [SuperpowerController::class, 'generate'])->name('generate');
 Route::post('/generate_training', [TrainingController::class, 'generate_training'])->name('generate_training');
