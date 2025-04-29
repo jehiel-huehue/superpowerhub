@@ -15,7 +15,7 @@
 
             
                 <!-- Display Existing Superpower -->
-                <div id="superpowerResult" class="bg-gray-800 p-6  shadow-lg w-full">
+                <div id="superpowerResult" class="bg-gray-800 p-6 rounded-lg shadow-lg w-full">
                     <h2 class="text-2xl font-bold mb-4 text-blue-600" id="powerName">Superpower: {{ $superpower->superpower }}</h2>
                     <p class="text-white mb-2" id="powerDescription">Description: {{ $superpower->description }}</p>
                     <p class="text-green-600 font-semibold" id="powerStrength">Strength: {{ $superpower->strength }}</p>
