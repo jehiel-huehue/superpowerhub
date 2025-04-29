@@ -49,11 +49,13 @@
                                     <div class="text-blue-200 font-medium">
                                         <span class="text-orange-300">Trainings Left Today:</span> 
                                         <span class="font-extrabold">{{ $training->trainings_per_day }}</span>
+                                        <span id="training_id" class="hidden">{{ $training->id }}</span>
                                     </div>
                                 </div>
                                 
                                 <button 
                                     id="trainingBtn" 
+                                    data-training-id="{{ $training->id }}"
                                     class="w-full p-3 bg-orange-500 text-blue-900 rounded-lg font-extrabold uppercase tracking-wider transition-all
                                     {{ $training->trainings_per_day === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-orange-600 transform hover:scale-105' }}"
                                     style="box-shadow: 0px 4px 0px #c05621;"
@@ -156,31 +158,137 @@
         }
         
         // Add event listeners to training buttons
-        document.querySelectorAll('#trainingBtn').forEach(button => {
-            if (!button.disabled) {
-                button.addEventListener('click', function() {
-                    // Add a pulse effect when clicked
-                    this.classList.add('animate-pulse');
-                    setTimeout(() => {
-                        this.classList.remove('animate-pulse');
-                        
-                        // Show comic-style training message
-                        const trainingDiv = document.createElement('div');
-                        trainingDiv.className = 'fixed top-1/4 left-1/2 transform -translate-x-1/2 bg-blue-800 border-4 border-orange-500 p-6 rounded-lg shadow-xl z-50';
-                        trainingDiv.innerHTML = `
-                            <h2 class="text-2xl font-extrabold text-orange-400 uppercase mb-4">ZAP! Training In Progress!</h2>
-                            <p class="text-blue-100 mb-4">Your powers are growing stronger!</p>
-                            <div class="text-center">
-                                <button class="bg-orange-500 text-blue-900 font-bold py-2 px-4 rounded-lg" onclick="this.parentElement.parentElement.remove(); window.location.reload();">
-                                    AWESOME!
-                                </button>
+        // document.querySelectorAll('#trainingBtn').forEach(button => {
+        //     document.querySelectorAll('#training_id').forEach(el => {
+        //           let id = el.dataset.id;
+        //           console.log(id); // Will log each training ID
+        //     });
+        //     return
+        //     if (!button.disabled) {
+        //         button.addEventListener('click', async function () {
+        //             return alert(id);
+        //             try {
+        //             const response = await fetch('{{ route('train') }}', {
+        //                 method: 'POST',
+        //                 headers: {
+        //                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        //                     'Accept': 'application/json',
+        //                 },
+        //             });
+
+        //             const data = await response.json();
+                    
+        //             // Show comic-style success message
+        //             const messageDiv = document.createElement('div');
+        //             messageDiv.className = 'fixed top-1/4 left-1/2 transform -translate-x-1/2 bg-blue-800 border-4 border-orange-500 p-6 rounded-lg shadow-xl z-50';
+        //             messageDiv.innerHTML = `
+        //                 <h2 class="text-2xl font-extrabold text-orange-400 uppercase mb-4">WHAM! SUCCESS!</h2>
+        //                 <p class="text-blue-100 mb-4">Your training has been generated!</p>
+        //                 <div class="text-center">
+        //                     <div class="inline-block bg-orange-500 text-blue-900 font-bold py-2 px-4 rounded-lg">
+        //                         Loading your training...
+        //                     </div>
+        //                 </div>
+        //             `;
+        //             document.body.appendChild(messageDiv);
+
+        //             // After a short delay, refresh the page
+        //             setTimeout(() => {
+        //                 window.location.reload();
+        //             }, 2000);
+
+        //         } catch (error) {
+        //             console.error('Error generating training:', error);
+                    
+        //             // Show comic-style error message
+        //             const errorDiv = document.createElement('div');
+        //             errorDiv.className = 'fixed top-1/4 left-1/2 transform -translate-x-1/2 bg-red-800 border-4 border-orange-500 p-6 rounded-lg shadow-xl z-50';
+        //             errorDiv.innerHTML = `
+        //                 <h2 class="text-2xl font-extrabold text-orange-400 uppercase mb-4">CRASH! ERROR!</h2>
+        //                 <p class="text-blue-100 mb-4">Failed to generate training.</p>
+        //                 <div class="text-center">
+        //                     <button class="bg-orange-500 text-blue-900 font-bold py-2 px-4 rounded-lg" onclick="this.parentElement.parentElement.remove()">
+        //                         Try Again
+        //                     </button>
+        //                 </div>
+        //             `;
+        //             document.body.appendChild(errorDiv);
+                    
+        //         } finally {
+        //             btn.disabled = false;
+        //             btn.innerText = 'GENERATE TRAINING!';
+        //             btn.classList.remove('animate-pulse');
+        //         }
+        //         });
+        //     }
+        // });
+        document.addEventListener('DOMContentLoaded', function () {
+            const trainingButtons = document.querySelectorAll('#trainingBtn');
+
+        trainingButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const trainingId = this.getAttribute('data-training-id');
+                console.log('Clicked Training ID:', trainingId);
+                const confirmed = confirm('Are you sure you want to train now?');
+                if (!confirmed) return;
+                // You can now use `trainingId` to call an API, update UI, etc.
+                try {
+                    const response = await fetch('{{ route('train') }}', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json', // ← this is required
+        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        'Accept': 'application/json',
+    },
+    body: JSON.stringify({ id: trainingId })
+});
+
+                    const data = await response.json();
+                    
+                    // Show comic-style success message
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'fixed top-1/4 left-1/2 transform -translate-x-1/2 bg-blue-800 border-4 border-orange-500 p-6 rounded-lg shadow-xl z-50';
+                    messageDiv.innerHTML = `
+                        <h2 class="text-2xl font-extrabold text-orange-400 uppercase mb-4">WHAM! SUCCESS!</h2>
+                        <p class="text-blue-100 mb-4">Your training has been generated!</p>
+                        <div class="text-center">
+                            <div class="inline-block bg-orange-500 text-blue-900 font-bold py-2 px-4 rounded-lg">
+                                Loading your training...
                             </div>
-                        `;
-                        document.body.appendChild(trainingDiv);
-                    }, 1000);
-                });
-            }
+                        </div>
+                    `;
+                    document.body.appendChild(messageDiv);
+
+                    // After a short delay, refresh the page
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+
+                } catch (error) {
+                    console.error('Error generating training:', error);
+                    
+                    // Show comic-style error message
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'fixed top-1/4 left-1/2 transform -translate-x-1/2 bg-red-800 border-4 border-orange-500 p-6 rounded-lg shadow-xl z-50';
+                    errorDiv.innerHTML = `
+                        <h2 class="text-2xl font-extrabold text-orange-400 uppercase mb-4">CRASH! ERROR!</h2>
+                        <p class="text-blue-100 mb-4">Failed to generate training.</p>
+                        <div class="text-center">
+                            <button class="bg-orange-500 text-blue-900 font-bold py-2 px-4 rounded-lg" onclick="this.parentElement.parentElement.remove()">
+                                Try Again
+                            </button>
+                        </div>
+                    `;
+                    document.body.appendChild(errorDiv);
+                    
+                } finally {
+                    btn.disabled = false;
+                    btn.innerText = 'GENERATE TRAINING!';
+                    btn.classList.remove('animate-pulse');
+                }
+            });
         });
+    });
     </script>
 </body>
 </html>

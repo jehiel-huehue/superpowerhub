@@ -143,4 +143,42 @@ class TrainingController extends Controller
             return response()->json(['error' => 'Failed to generate training.'], 500);
         }
     }
+
+    public function train(Request $request)
+{
+    Log::info('Train method called', ['request_data' => $request->all()]);
+
+    $request->validate([
+        'id' => 'required|exists:trainings,id'
+    ]);
+
+    $training = Training::find($request->id);
+
+    if (!$training) {
+        Log::warning('Training not found', ['id' => $request->id]);
+        return response()->json(['error' => 'Training not found'], 404);
+    }
+
+    Log::info('Training before update', [
+        'id' => $training->id,
+        'level' => $training->level,
+        'trainings_per_day' => $training->trainings_per_day
+    ]);
+
+    $training->trainings_per_day = 0;
+    $training->level += 1;
+    $training->save();
+
+    Log::info('Training after update', [
+        'id' => $training->id,
+        'level' => $training->level,
+        'trainings_per_day' => $training->trainings_per_day
+    ]);
+
+    return response()->json([
+        'message' => 'Training updated successfully.',
+        'training' => $training
+    ]);
+}
+
 }
