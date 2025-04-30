@@ -29,6 +29,11 @@ class User extends Authenticatable
         return $this->hasOne(Superpower::class);
     }
 
+    public function trainingLogs()
+    {
+        return $this->hasMany(TrainingLog::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Training;
+use App\Models\TrainingLog;
 use App\Models\Superpower;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -145,40 +146,47 @@ class TrainingController extends Controller
     }
 
     public function train(Request $request)
-{
-    Log::info('Train method called', ['request_data' => $request->all()]);
+    {
+        Log::info('Train method called', ['request_data' => $request->all()]);
 
-    $request->validate([
-        'id' => 'required|exists:trainings,id'
-    ]);
+        $request->validate([
+            'id' => 'required|exists:trainings,id'
+        ]);
 
-    $training = Training::find($request->id);
+        $training = Training::find($request->id);
 
-    if (!$training) {
-        Log::warning('Training not found', ['id' => $request->id]);
-        return response()->json(['error' => 'Training not found'], 404);
+        if (!$training) {
+            Log::warning('Training not found', ['id' => $request->id]);
+            return response()->json(['error' => 'Training not found'], 404);
+        }
+
+        $user = Auth::user(); // Get the authenticated user
+
+        $previousLevel = $training->level;
+        $training->trainings_per_day = 0;
+        $training->level += 1;
+        $training->save();
+
+        // Save to TrainingLog
+        TrainingLog::create([
+            'training_id' => $training->id,
+            'user_id' => $user->id,
+            'previous_level' => $previousLevel,
+            'new_level' => $training->level,
+            'trained_at' => now(),
+        ]);
+
+        Log::info('Training updated and logged', [
+            'training_id' => $training->id,
+            'user_id' => $user->id,
+            'previous_level' => $previousLevel,
+            'new_level' => $training->level,
+        ]);
+
+        return response()->json([
+            'message' => 'Training updated successfully.',
+            'training' => $training
+        ]);
     }
-
-    Log::info('Training before update', [
-        'id' => $training->id,
-        'level' => $training->level,
-        'trainings_per_day' => $training->trainings_per_day
-    ]);
-
-    $training->trainings_per_day = 0;
-    $training->level += 1;
-    $training->save();
-
-    Log::info('Training after update', [
-        'id' => $training->id,
-        'level' => $training->level,
-        'trainings_per_day' => $training->trainings_per_day
-    ]);
-
-    return response()->json([
-        'message' => 'Training updated successfully.',
-        'training' => $training
-    ]);
-}
 
 }
