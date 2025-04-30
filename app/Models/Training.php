@@ -22,4 +22,9 @@ class Training extends Model
     {
         return $this->belongsTo(Superpower::class);
     }
+
+    public function logs()
+    {
+        return $this->hasMany(TrainingLog::class);
+    }
 }

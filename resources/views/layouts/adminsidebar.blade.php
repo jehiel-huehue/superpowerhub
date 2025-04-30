@@ -21,7 +21,7 @@
 
         <!-- Navigation Links with Comic Styling -->
         <nav class="flex flex-col p-4 space-y-3">
-            <a href="/dashboard"
+            <a href="/admin/dashboard"
                 class="block p-3 rounded-lg font-bold uppercase tracking-wide text-orange-300 hover:bg-blue-700 hover:text-orange-400 transform hover:scale-105 transition-all {{ request()->is('dashboard') ? 'bg-blue-800 border-l-4 border-orange-500' : '' }}">
                 <div class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
@@ -32,7 +32,7 @@
                     Dashboard
                 </div>
             </a>
-            <a href="/superpower"
+            <a href="/admin/users"
                 class="block p-3 rounded-lg font-bold uppercase tracking-wide text-orange-300 hover:bg-blue-700 hover:text-orange-400 transform hover:scale-105 transition-all {{ request()->is('superpower') ? 'bg-blue-800 border-l-4 border-orange-500' : '' }}">
                 <div class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
@@ -40,29 +40,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    Superpower
-                </div>
-            </a>
-            <a href="/training"
-                class="block p-3 rounded-lg font-bold uppercase tracking-wide text-orange-300 hover:bg-blue-700 hover:text-orange-400 transform hover:scale-105 transition-all {{ request()->is('training') ? 'bg-blue-800 border-l-4 border-orange-500' : '' }}">
-                <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                    Training
-                </div>
-            </a>
-            <a href="/reports"
-                class="block p-3 rounded-lg font-bold uppercase tracking-wide text-orange-300 hover:bg-blue-700 hover:text-orange-400 transform hover:scale-105 transition-all {{ request()->is('reports') ? 'bg-blue-800 border-l-4 border-orange-500' : '' }}">
-                <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Reports
+                    User
                 </div>
             </a>
         </nav>

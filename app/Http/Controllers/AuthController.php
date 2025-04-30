@@ -25,16 +25,30 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        // Validate the credentials
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
+        // Attempt to log the user in
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            // Regenerate the session to avoid session fixation attacks
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard'); // or wherever you want
+
+            // Check the user's role and redirect accordingly
+            $user = Auth::user();
+
+            // If the user is an admin, redirect to the admin dashboard
+            if ($user->role === 'admin') {
+                return redirect()->intended('/admin/dashboard');
+            }
+
+            // For regular users, redirect to the user dashboard
+            return redirect()->intended('/dashboard');
         }
 
+        // If login fails, return with an error
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');

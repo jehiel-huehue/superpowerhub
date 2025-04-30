@@ -20,7 +20,7 @@ class SuperpowerController extends Controller
         $superpower = $user->superpower; // assuming the relationship is defined
 
         // Pass the superpower data to the view
-        return view('superpower', compact('superpower'));
+        return view('superpower', compact('superpower', 'user'));
     }
     
     public function generate(Request $request)
